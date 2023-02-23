@@ -2,20 +2,25 @@
 
     <% loop $GlobalSpecialAnnouncements %>
 
-    <div class="nsw-sitewide-message<% if $GlobalAlert_AlertState=='critical' %> nsw-sitewide-message--critical<% else_if $GlobalAlert_AlertState=='light' %> nsw-sitewide-message--light<% end_if %> js-sitewide-message" role="alert">
+    <div class="nsw-sitewide-message<% if $AlertState=='critical' %> nsw-sitewide-message--critical<% else_if $AlertState=='light' %> nsw-sitewide-message--light<% end_if %> js-sitewide-message" role="alert">
 
         <div class="nsw-sitewide-message__wrapper">
 
             <div class="nsw-sitewide-message__content">
-                <h2 class="nsw-sitewide-message__title">{$GlobalAlert_Title.XML}</h2>
-                <p>{$GlobalAlert_Content.XML}<% if not $GlobalAlert_UseButtonLink %> <a href="{$GlobalAlert_LinkURL}" class="nsw-sitewide-message__link"><% if $GlobalAlert_LinkTitle %>{$GlobalAlert_LinkTitle}<% else %><%t nswds.MORE_INFORMATION 'More information' %></a><% end_if %><% end_if %></p>
+                <h2 class="nsw-sitewide-message__title">{$Title.XML}</h2>
+                {$Content}
+                <% if $Link && not $UseButtonLink %>
+                    <a href="{$Link.URL}" class="nsw-sitewide-message__link" <% if $Link.OpenInNewWindow %>target="_blank"<% end_if %>><% if $Link.Title %>{$Link.Title}<% else %><%t nswds.MORE_INFORMATION 'More information' %><% end_if %></a>
+                <% end_if %>
             </div>
 
-            <% if $GlobalAlert_UseButtonLink %>
-                <% if $GlobalAlert_ButtonTitle %>
-                    <% include nswds/Button Button_LinkURL=$GlobalAlert_LinkURL, Button_Title=$GlobalAlert_ButtonTitle %>
-                <% else %>
-                    <% include nswds/Button Button_LinkURL=$GlobalAlert_LinkURL, Button_Title='More information' %>
+            <% if $LinkURL %>
+                <% if $UseButtonLink %>
+                    <% if $ButtonTitle %>
+                        <% include nswds/Button Button_LinkURL=$LinkURL, Button_Title=$ButtonTitle %>
+                    <% else %>
+                        <% include nswds/Button Button_LinkURL=$LinkURL, Button_Title='More information' %>
+                    <% end_if %>
                 <% end_if %>
             <% end_if %>
 
@@ -26,9 +31,9 @@
 
         </div>
 
-        <% if $GlobalAlert_SchemaJSON %>
+        <% if $SchemaJSON %>
         <script type="application/ld+json">
-            $GlobalAlert_SchemaJSON.RAW
+            $SchemaJSON.RAW
         </script>
         <% end_if %>
 
